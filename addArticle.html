@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+    <link rel="stylesheet" href="./dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <section class="" id="populate"></section>
+    <section class="container">
+        <form action="/post/article" method="post">
+            <section class="form-group">
+                <label for="title">title</label>
+                <input type="text" name="title" id="title" class="form-control">
+            </section>
+            <section class="form-group">
+                <label for="body">body</label>
+                <textarea name="body" id="body" cols="30" rows="10" class="form-control"></textarea>
+            </section>
+            <section class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" class="form-control">
+            </section>
+            <section class="form-group">
+                <label for="confirm">Confirm Password:</label>
+                <input type="password" name="confirm" id="confirm" class="form-control">
+            </section>
+            <section>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </section>
+        </form>
+    </section>
+    <script src="./dist/js/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:3000/errors',
+                success: function (data) {
+                    console.log('here')
+                    $('#populate').empty();
+                    let myHtml = '';
+                    if (data.errors) {
+                        console.log('this place')
+                        console.log(data);
+                        if (data.title && data.body) {
+                            $('#title').val(data.title);
+                            $('#body').val(data.body);
+                        } else
+                        if (data.title) {
+                            $('#title').val(data.title);
+                        } else if (data.body) {
+                            $('#body').val(data.body);
+                        }
+
+
+                        data.errors.forEach((item, index) => {
+
+                            myHtml += `<div class="alert alert-danger">${item.msg}</div>`
+                        })
+                        $('#populate').append(myHtml);
+                    }
+
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+
+            })
+        })
+    </script>
+</body>
+
+</html>

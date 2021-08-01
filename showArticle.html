@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+    <link rel="stylesheet" href="./dist/css/bootstrap.min.css">
+    <style>
+        #line {
+            /* margin-bottom: 7px;
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 9px;
+            border-color: blue;  
+            border-width: 4px; */
+            border-left: none;
+            border-right: none;
+            border-bottom: 2px solid grey;
+            border-top: 2px solid gray;
+            height: 70px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="" id="add"></div>
+    <script src="./dist/js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:3000/article',
+                success: function (data) {
+                    $('#add').empty();
+                    let myHTML = ""
+                    
+                        myHTML += `<h1>${data.article.title}</h1>`
+                        myHTML += `<p>${data.article.body}</p>`
+                        myHTML += '<div id="line">';
+                        myHTML += `<a href='/edit/${data.article.count}' class="btn btn-block btn-warning">Edit</a>`  
+                        myHTML += `<form action="/delete/${data.article.count}?_method=DELETE" method="post">` 
+                        myHTML += '<input type="hidden" name="_method" value="DELETE">' 
+                        myHTML += '<button type="submit" class="btn btn-block btn-danger">Delete</button>' 
+                        myHTML +='</form>'   
+                        myHTML += '</div>'
+
+                    
+                    $('#add').append(myHTML);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
