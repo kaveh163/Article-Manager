@@ -13,7 +13,7 @@ let arr = [];
 const showArr = [];
 let showObj = {};
 let myHTML
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 let count = 0;
 let errorVal = '';
 let title1 = '';
