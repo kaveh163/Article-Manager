@@ -1,7 +1,7 @@
 $(function() {
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:3000/home',
+        url: '/home',
         success: function(data) {
             console.log(data);
             $('#list').empty();
