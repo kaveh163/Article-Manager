@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forms</title>
     <link rel="stylesheet" href="./dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./font/css/all.css">
     <style>
         #line {
             /* margin-bottom: 7px;
@@ -15,12 +16,36 @@
             margin-top: 9px;
             border-color: blue;  
             border-width: 4px; */
-            border-left: none;
-            border-right: none;
-            border-bottom: 2px solid grey;
-            border-top: 2px solid gray;
+            border-left: 2px solid rgba(0,0,0,.125);;
+            border-right: 2px solid rgba(0,0,0,.125);;
+            border-bottom: 2px solid rgba(0,0,0,.125);
+            border-top: 2px solid rgba(0,0,0,.125);
             height: 70px;
 
+        }
+        .fix {
+            box-sizing: border-box;
+            height: 68px;
+            width: 50px;
+            margin-left:25px;
+            border-radius: 0!important;
+            color: white;
+            margin-right: auto;
+            border: none;
+            
+        }
+        .align {
+            line-height: 47px;
+        }
+        textarea {
+            height: 200px;
+            width: 100%;
+            padding: 8px;
+            overflow: auto;
+            border: 1px solid rgba(0,0,0,.125)
+        }
+        body {
+            font-family: 'Times New Roman', serif;
         }
     </style>
 </head>
@@ -36,16 +61,41 @@
                 success: function (data) {
                     $('#add').empty();
                     let myHTML = ""
-                    
-                        myHTML += `<h1>${data.article.title}</h1>`
-                        myHTML += `<p>${data.article.body}</p>`
-                        myHTML += '<div id="line">';
-                        myHTML += `<a href='/edit/${data.article.count}' class="btn btn-block btn-warning">Edit</a>`  
-                        myHTML += `<form action="/delete/${data.article.count}?_method=DELETE" method="post">` 
-                        myHTML += '<input type="hidden" name="_method" value="DELETE">' 
-                        myHTML += '<button type="submit" class="btn btn-block btn-danger">Delete</button>' 
-                        myHTML +='</form>'   
+                        myHTML += '<section class="container">'
+                        myHTML += '<section class="row">'
+                        myHTML += '<section class="offset-2 col-8 text-center">'
+                        myHTML += '<div class="card">'
+                        myHTML += '<div class="card-header">'
+                        myHTML += `<h1 class="font text-black-50"><b>${data.article.title}</b></h1>`
                         myHTML += '</div>'
+                            //end card header
+                        myHTML += '<div class="card-body">'
+                        myHTML += '<textarea readonly>'
+                        myHTML += `${data.article.body}`
+                        myHTML += '</textarea>'
+                        myHTML += '</div>'
+                        // end card body
+                        myHTML += '<div class="card-footer">'
+                        myHTML += '<div id="line">';
+                        myHTML += `<a href='/edit/${data.article.count}' class="btn d-inline-block  fix  text-black-50"><h5 class="align"><b><i class="fas fa-edit"></i></b></h5></a>`  
+                        myHTML += `<form action="/delete/${data.article.count}?_method=DELETE" method="post" class="d-inline-block">` 
+                        myHTML += '<input type="hidden" name="_method" value="DELETE">' 
+                        myHTML += '<button type="submit" class="btn fix text-black-50"><h5><b><i class="fas fa-trash"></i></b></h5></button>' 
+                        myHTML +='</form>'  
+                        myHTML += '<a href= "/" class="btn d-inline-block fix text-black-50"><h5 class="align"><b><i class="fa fa-home" aria-hidden="true"></i></b></h5></a>' 
+                        myHTML += '</div>'
+                        // end line
+                        myHTML += '</div>'
+                        // end card footer
+                        
+                        myHTML += '</div>'
+                        // end card
+                        myHTML += '</section>'
+                        // end column
+                        myHTML += '</section>'
+                        // end row
+                        myHTML += '</section>'
+                        //end container
 
                     
                     $('#add').append(myHTML);
@@ -56,6 +106,7 @@
             })
         })
     </script>
+    <script defer src="./font//js/all.js"></script>
 </body>
 
 </html>
