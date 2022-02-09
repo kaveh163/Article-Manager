@@ -60,16 +60,25 @@ app.get('/edit/article', function (req, res) {
 })
 app.get('/edit/:id', function (req, res) {
     const id = req.params.id;
+    let title;
+    let body;
     console.log('editroute', id);
+    arr.forEach((value, index)=> {
+        if(value.count === Number(id)){
+            title = value.title;
+            body = value.body;
+        }
+    })
+    console.log('editbody', body);
     myHTML =
         `<form action="/update/article/${id}?_method=PUT" method="post">
     <input type="hidden" name="_method" value="PUT">
     <section class="form-group">
         <label for="title">title</label>
-        <input type="text" class="form-control" id="title" name="title">
+        <input type="text" class="form-control" id="title" name="title" value="${title}">
     </section>
     <section class="form-group">
-        <textarea name="body" id="body" cols="30" rows="10" class="form-control"></textarea>
+        <textarea name="body" id="body" cols="30" rows="10" class="form-control">${body}</textarea>
     </section>
     <button type="submit" class="btn btn-block btn-info">Update</button>
 
