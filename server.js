@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const session = require('express-session');
 const {
     check,
@@ -63,8 +65,8 @@ app.get('/edit/:id', function (req, res) {
     let title;
     let body;
     console.log('editroute', id);
-    arr.forEach((value, index)=> {
-        if(value.count === Number(id)){
+    arr.forEach((value, index) => {
+        if (value.count === Number(id)) {
             title = value.title;
             body = value.body;
         }
@@ -113,13 +115,27 @@ app.post('/post/article', [check('title', 'title must be filled').not().isEmpty(
         res.redirect('/addArticle.html');
 
     } else {
+        let jsonArr = [];
         count++;
-        data = {
+        let dataObj = {
             title: req.body.title,
             body: req.body.body,
             count: count
         }
-        arr.push(data);
+        const data = fs.readFileSync(path.join(__dirname, 'db', 'db.json'), {
+            encoding: "utf8"
+        });
+        // arr.push(data);
+        if (data === '') {
+            jsonArr.push(dataObj);
+            fs.writeFileSync(path.join(__dirname,'db', 'db.json'), JSON.stringify(jsonArr, null, 3, ));
+            jsonArr.length = 0;
+            jsonArr = [];
+        } else {
+            const dataJson = JSON.parse(data);
+            dataJson.push(dataObj);
+            fs.writeFileSync(path.join(__dirname,'db', 'db.json'), JSON.stringify(dataJson, null, 3, ));
+        }
         res.redirect('/');
     }
 
@@ -139,34 +155,43 @@ app.put('/update/article/:id', function (req, res) {
     obj['body'] = body;
 
 
-    arr.forEach((value, index) => {
+    const data = fs.readFileSync(path.join(__dirname, 'db', 'db.json'), {
+        encoding: "utf8"
+    });
+    data.forEach((value, index) => {
 
         if (value.count == Number(id)) {
-            arr.splice(index, 1, obj)
+            data.splice(index, 1, obj)
         }
     })
+    fs.writeFileSync(path.join(__dirname,'db', 'db.json'), JSON.stringify(data, null, 3, ));
     console.log('after', arr);
     res.redirect('/');
 })
 app.delete('/delete/:id', function (req, res) {
-    console.log('delete', arr);
+    // console.log('delete', arr);
     const id = req.params.id;
     console.log(id);
 
-    arr.forEach((value, index) => {
+    const data = fs.readFileSync(path.join(__dirname, 'db', 'db.json'), {
+        encoding: "utf8"
+    });
+
+    data.forEach((value, index) => {
         if (value.count === Number(id)) {
             // count = value.count - 1;
-            arr.splice(index, 1);
+            data.splice(index, 1);
         }
     });
-    arr = arr.map((item, index) => {
+    data = data.map((item, index) => {
         let obj = {};
         obj['count'] = index + 1;
         obj['title'] = item.title;
         obj['body'] = item.body;
         return obj;
     })
-    count = arr.length;
+    fs.writeFileSync(path.join(__dirname,'db', 'db.json'), JSON.stringify(data, null, 3, ));
+    // count = data.length;
     res.redirect('/');
     // res.send('<h1>Deleted</h1>')
 })
